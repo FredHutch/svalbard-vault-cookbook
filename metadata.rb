@@ -1,0 +1,7 @@
+name 'svalbard-vault'
+maintainer 'The Authors'
+maintainer_email 'you@example.com'
+license 'all_rights'
+description 'Installs/Configures svalbard-vault'
+long_description 'Installs/Configures svalbard-vault'
+version '0.1.0'
