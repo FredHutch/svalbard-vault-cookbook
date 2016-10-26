@@ -7,6 +7,6 @@ long_description 'Installs/Configures svalbard-vault'
 version '0.1.0'
 
 depends 'chef-vault'
-depends 'ssl_certificate', '~> 1.11'
-depends 'consul-cluster', '~> 2.0'
-depends 'hashicorp-vault', '~> 2.4'
+depends 'trusted_certificate', '~> 1.0.0'
+
+
