@@ -43,6 +43,11 @@ file "#{ssl_dir}/svalbard-root-ca.pem" do
   mode 0644
 end
 
+trusted_certificate 'svalbard' do
+  action :create
+  content root_cert['certificate']
+end
+
 file "#{ssl_dir}/#{node['hostname']}.pem" do
   content my_cert['certificate']
   owner 'root'

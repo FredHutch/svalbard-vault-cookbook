@@ -8,5 +8,3 @@ version '0.1.0'
 
 depends 'chef-vault'
 depends 'trusted_certificate', '~> 1.0.0'
-
-
