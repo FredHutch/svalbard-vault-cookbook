@@ -30,6 +30,22 @@ consul_dirs.each do |d|
   end
 end
 
+download_url = 'https://releases.hashicorp.com/consul/'\
+  "#{node['svalbard-vault']['consul']['version']}/"\
+  "consul_#{node['svalbard-vault']['consul']['version']}_"\
+  "#{node['os']}_amd64.zip"
+
+bash 'download and deploy consul' do
+  cwd node['svalbard-vault']['root_dir']
+  code <<-EREH
+  wget -O /tmp/consul.zip #{download_url} && \
+  unzip /tmp/consul.zip -d #{node['svalbard-vault']['root_dir']}/consul/bin
+  EREH
+  not_if do
+    ::File.exist?("#{node['svalbard-vault']['root_dir']}/consul/bin/consul")
+  end
+end
+
 # Load hosts ssl keys from vault and install for consul
 
 ssl_dir = "#{node['svalbard-vault']['root_dir']}/consul/etc/ssl"
@@ -72,4 +88,21 @@ template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
     'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
     'datacenter' => node['svalbard-vault']['consul']['config']['dc']
   )
+end
+
+bash 'enable agent' do
+  code 'systemctl enable consul-agent.service'
+  action :nothing
+end
+
+template '/lib/systemd/system/consul-agent.service' do
+  source 'consul-agent.service.erb'
+  owner 'root'
+  group 'root'
+  mode 0644
+  variables(
+    'bin_consul' => "#{node['svalbard-vault']['root_dir']}/consul/bin/consul",
+    'etc_consul' => "#{node['svalbard-vault']['root_dir']}/consul/etc"
+  )
+  notifies :run, 'bash[enable agent]'
 end
