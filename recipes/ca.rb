@@ -52,4 +52,3 @@ bash 'generate ca certificate and key' do
     EREH
   not_if { ::File.exist?(ca_cert) || ::File.exist?(ca_key) }
 end
-
