@@ -7,6 +7,12 @@
 
 include_recipe 'chef-vault'
 
+user 'consul' do
+  comment 'Consul Service Account'
+  home "#{node['svalbard-vault']['root_dir']}/consul"
+  shell '/bin/bash'
+end
+
 directory node['svalbard-vault']['root_dir'] do
   owner 'root'
   group 'root'
@@ -78,16 +84,47 @@ file "#{ssl_dir}/#{node['hostname']}.key" do
   mode 0644
 end
 
+#  - any node running this recipe will have the client config installed.
+#  - if a node has the `server` role, it will have the server configs
+#    installed
+#  - for the time being, bootstrap will have to be a manual process
+
+# Search for nodes with role "server" and use IPs from that search
+# to populate the "start_join" and "servers" in the configuration file
+
+servers = search(:node, 'role:svalbard-consul-server',
+                 filter_result: { 'ip' => ['ipaddress'] })
+servers = servers.collect { |e| "#{e['ip']}" }
+
 template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
-  source 'consul-config.json.erb'
+  source 'consul/config.json.erb'
   variables(
     'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
     'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
     'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
     'bind_addr'  => node['ipaddress'],
     'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-    'datacenter' => node['svalbard-vault']['consul']['config']['dc']
+    'datacenter' => node['svalbard-vault']['consul']['config']['dc'],
+    'servers'    => servers
   )
+end
+
+if node.role?('svalbard-consul-server')
+  # Pull this nodes IP address out of the list of servers
+  servers = servers - [node['ipaddress']]
+  template "#{node['svalbard-vault']['root_dir']}/"\
+    "consul/etc/config.server.json" do
+    source 'consul/config.server.json.erb'
+    variables(
+      'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
+      'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
+      'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
+      'bind_addr'  => node['ipaddress'],
+      'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
+      'datacenter' => node['svalbard-vault']['consul']['config']['dc'],
+      'servers'    => servers
+    )
+  end
 end
 
 bash 'enable agent' do

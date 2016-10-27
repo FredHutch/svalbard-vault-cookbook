@@ -12,7 +12,7 @@ suites:
   - name: default
     data_bags_path: "test/integration/default/data_bags"
     run_list:
-      - recipe[svalbard-vault::default]
+      - role[svalbard-consul-server]
     attributes:
   - name: ca
     data_bags_path: "test/integration/ca/data_bags"

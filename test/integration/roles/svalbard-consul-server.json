@@ -1,0 +1,8 @@
+{
+  "name": "svalbard-consul-server",
+  "default_attributes": {
+  },
+  "run_list": [
+    "recipe[svalbard-vault::default]"
+  ]
+}
