@@ -1,11 +1,12 @@
 {
-  "bind_addr": "<%= @ca_file %>",
+  "bootstrap": "<%= @bootstrap %>",
+  "bind_addr": "<%= @bind_addr %>",
   "datacenter": "<%= @dc %>",
   "client_addr": "0.0.0.0",
   "data_dir": "<%= @data_dir %>",
   "ca_file": "<%= @ca_file %>",
   "key_file": "<%= @key_file %>",
-  "cert_file": "<%= @key_file %>",
+  "cert_file": "<%= @cert_file %>",
   "ports": {
     "dns": 8600,
     "https": 8443,
@@ -16,5 +17,6 @@
   },
   "server": true,
   "verify_incoming": true,
-  "verify_outgoing": true
+  "verify_outgoing": true,
+  "start_join": <%= @servers %>
 }
