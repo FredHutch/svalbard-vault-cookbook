@@ -34,6 +34,20 @@ directory "#{root_dir}/ca/private" do
   action :create
 end
 
+file "#{root_dir}/ca/index.txt" do
+  content ''
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
+file "#{root_dir}/ca/serial" do
+  content '1000'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 template "#{root_dir}/ca/openssl.conf" do
   source 'ca/openssl.conf.erb'
   variables('ssl_dir' => "#{root_dir}/ca")
