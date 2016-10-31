@@ -27,7 +27,8 @@ ip=$(dig +short $hostname.$dn)
 
 cert_host_name=${hostname}.${datacenter}.consul
 
-# Generate OpenSSL configuration
+# Generate OpenSSL configuration with alternate names usable
+# by this certificate
 ssl_config=$(tempfile)
 cp etc/openssl.conf.tmpl ${ssl_config}
 

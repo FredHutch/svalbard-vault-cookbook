@@ -1,0 +1,61 @@
+[ ca ]
+default_ca = svalbard_ca
+
+[ req ]
+default_bits = 2048
+default_keyfile = key.pem
+distinguished_name = req_distinguished_name
+
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+countryName_default             = US
+countryName_min                 = 2
+countryName_max                 = 2
+
+stateOrProvinceName             = State or Province Name (full name)
+stateOrProvinceName_default     = Washington
+
+localityName                    = Locality Name (eg, city)
+localityName_default            = Seattle
+
+0.organizationName              = Organization Name (eg, company)
+0.organizationName_default      = Fred Hutchinson CRC
+
+organizationalUnitName          = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = Scientific Computing
+
+commonName                      = CN (use hostname.dc.consul for svalbard)
+commonName_max                  = 64
+
+[ crl_ext ]
+# issuerAltName=issuer:copy  #this would copy the issuer name to altname
+#authorityKeyIdentifier=keyid:always
+
+[ svalbard_ca ]
+dir = <% @ssl_dir %>
+new_certs_dir = /tmp
+unique_subject = no
+certificate = $dir/svalbard-root-ca.pem
+database = $dir/index.txt
+private_key = $dir/private/svalbard-root-ca.key
+serial = $dir/serial
+default_days = 1095
+default_md = sha1
+policy = svalbard-policy
+x509_extensions = svalbard_extensions
+
+[ svalbard-policy ]
+countryName = supplied
+stateOrProvinceName = supplied
+commonName = supplied
+emailAddress = optional
+organizationName = supplied
+organizationalUnitName = optional
+
+[ svalbard_extensions ]
+basicConstraints = CA:false
+subjectKeyIdentifier = hash
+#authorityKeyIdentifier = keyid:always
+keyUsage = digitalSignature,keyEncipherment
+extendedKeyUsage = serverAuth,clientAuth
+crlDistributionPoints = URI:http://path.to.crl/demo.crl

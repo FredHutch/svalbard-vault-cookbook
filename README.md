@@ -4,6 +4,17 @@ c.f. http://www.seedvault.no/
 
 Configure hashicorp vault and consul back-end servers.
 
+# Bootstrapping into chef
+
+```
+knife bootstrap \
+-r 'role[cit-base]','role[scicomp-base]','role[svalbard-consul-server]' \
+--bootstrap-vault-item svalbard-certs:root_cert \
+--bootstrap-vault-item svalbard-certs:<hostname> \
+-N <fqdn> <fqdn>
+```
+
+
 # Configuration
 
 ## Generate Private CA for Signing Certs
