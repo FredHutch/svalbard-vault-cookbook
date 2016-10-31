@@ -48,6 +48,13 @@ template "#{root_dir}/ca/etc/openssl.conf.tmpl" do
   mode '0644'
 end
 
+template "#{root_dir}/ca/bin/request-cert.sh" do
+  source 'ca/request-cert.sh'
+  variables('ssl_dir' => "#{root_dir}/ca")
+  owner 'root'
+  mode '0755'
+end
+
 ssl_config_file = "#{root_dir}/ca/openssl.conf"
 ca_cert = "#{root_dir}/ca/svalbard-root-ca.pem"
 ca_key = "#{root_dir}/ca/private/svalbard-root-ca.key"

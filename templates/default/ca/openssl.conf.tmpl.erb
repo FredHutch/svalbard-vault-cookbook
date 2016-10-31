@@ -32,7 +32,7 @@ commonName_max                  = 64
 #authorityKeyIdentifier=keyid:always
 
 [ svalbard_ca ]
-dir = <% @ssl_dir %>
+dir = <%= @ssl_dir %>
 new_certs_dir = /tmp
 unique_subject = no
 certificate = $dir/svalbard-root-ca.pem

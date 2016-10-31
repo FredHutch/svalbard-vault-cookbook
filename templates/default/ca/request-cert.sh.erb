@@ -17,7 +17,7 @@ then
 	echo "hostname or datacenter not specified."
 	exit 1
 fi
-
+cd <%= @ssl_dir %>
 echo "Making certificate for $hostname in $datacenter"
 dn=$(dnsdomainname)
 dn=fhcrc.org
