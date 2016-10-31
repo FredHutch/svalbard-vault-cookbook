@@ -49,7 +49,7 @@ template "#{root_dir}/ca/etc/openssl.conf.tmpl" do
 end
 
 template "#{root_dir}/ca/bin/request-cert.sh" do
-  source 'ca/request-cert.sh'
+  source 'ca/request-cert.sh.erb'
   variables('ssl_dir' => "#{root_dir}/ca")
   owner 'root'
   mode '0755'
