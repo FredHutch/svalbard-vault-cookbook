@@ -17,7 +17,11 @@ then
 	echo "hostname or datacenter not specified."
 	exit 1
 fi
+
+cert_host_name=${hostname}.${datacenter}.consul
+
 pushd <%= @ssl_dir %>
+
 # Check for existing certs
 if [ -f certs/${cert_host_name}.pem ]
 then
@@ -43,8 +47,6 @@ dn=fhcrc.org
 
 hostname=$(basename $hostname $dn)
 ip=$(dig +short $hostname.$dn)
-
-cert_host_name=${hostname}.${datacenter}.consul
 
 # Generate OpenSSL configuration with alternate names usable
 # by this certificate
