@@ -17,7 +17,7 @@ then
 	echo "hostname or datacenter not specified."
 	exit 1
 fi
-cd <%= @ssl_dir %>
+pushd <%= @ssl_dir %>
 echo "Making certificate for $hostname in $datacenter"
 dn=$(dnsdomainname)
 dn=fhcrc.org
@@ -65,4 +65,5 @@ cat > certs/${cert_host_name}.json <<EREH
 EREH
 
 rm ${ssl_config}
+popd
 
