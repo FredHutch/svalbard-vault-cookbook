@@ -18,6 +18,25 @@ then
 	exit 1
 fi
 pushd <%= @ssl_dir %>
+# Check for existing certs
+if [ -f certs/${cert_host_name}.pem ]
+then
+        echo "certificate exists" >&2
+        exit 1
+fi
+
+if [ -f certs/${cert_host_name}.key ]
+then
+        echo "certificate key exists" >&2
+        exit 1
+fi
+
+if [ -f requests/${cert_host_name}.csr ]
+then
+        echo "certificate request exists" >&2
+        exit 1
+fi
+
 echo "Making certificate for $hostname in $datacenter"
 dn=$(dnsdomainname)
 dn=fhcrc.org
