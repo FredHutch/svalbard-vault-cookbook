@@ -79,7 +79,7 @@ json_key=$(awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' certs/${cert_host_name}.
 
 cat > certs/${cert_host_name}.json <<EREH
 {
-    "id": "vault",
+        "id": "${hostname}",
     "key": "${json_key}",
     "certificate": "${json_crt}"
 }
