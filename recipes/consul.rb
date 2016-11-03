@@ -128,7 +128,7 @@ if node.role?('svalbard-consul-server')
       'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
       'bind_addr'  => node['ipaddress'],
       'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-      'datacenter' => node['svalbard-vault']['consul']['config']['dc'],
+      'dc'         => node['svalbard-vault']['consul']['config']['dc'],
       'servers'    => servers
     )
   end
