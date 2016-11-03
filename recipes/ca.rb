@@ -11,6 +11,8 @@ root_dir = node['svalbard-vault']['root_dir']
 ca_dirs = [
   root_dir,
   "#{root_dir}/ca",
+  "#{root_dir}/ca/bin",
+  "#{root_dir}/ca/etc",
   "#{root_dir}/ca/requests",
   "#{root_dir}/ca/certs"
 ]
@@ -32,11 +34,39 @@ directory "#{root_dir}/ca/private" do
   action :create
 end
 
+file "#{root_dir}/ca/index.txt" do
+  content ''
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
+file "#{root_dir}/ca/serial" do
+  content '1000'
+  owner 'root'
+  group 'root'
+  mode '0644'
+end
+
 template "#{root_dir}/ca/openssl.conf" do
-  source 'openssl.conf.erb'
+  source 'ca/openssl.conf.erb'
   variables('ssl_dir' => "#{root_dir}/ca")
   owner 'root'
   mode '0644'
+end
+
+template "#{root_dir}/ca/etc/openssl.conf.tmpl" do
+  source 'ca/openssl.conf.tmpl.erb'
+  variables('ssl_dir' => "#{root_dir}/ca")
+  owner 'root'
+  mode '0644'
+end
+
+template "#{root_dir}/ca/bin/request-cert.sh" do
+  source 'ca/request-cert.sh.erb'
+  variables('ssl_dir' => "#{root_dir}/ca")
+  owner 'root'
+  mode '0755'
 end
 
 ssl_config_file = "#{root_dir}/ca/openssl.conf"
