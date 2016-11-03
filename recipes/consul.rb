@@ -13,6 +13,13 @@ user 'consul' do
   shell '/bin/bash'
 end
 
+directory node['svalbard-vault']['consul']['config']['data_dir'] do
+  owner 'consul'
+  group 'root'
+  mode 0755
+  recursive true
+end
+
 directory node['svalbard-vault']['root_dir'] do
   owner 'root'
   group 'root'
