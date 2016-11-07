@@ -99,10 +99,15 @@ end
 # Search for nodes with role "server" and use IPs from that search
 # to populate the "start_join" and "servers" in the configuration file
 
-servers = search(:node, 'role:svalbard-consul-server',
-                 filter_result: { 'ip' => ['ipaddress'] })
-servers = servers.collect { |e| e['ip'].to_s }
-servers.delete('')
+if Chef::Config[:solo]
+  Chef::Log.warn('Chef solo does not support search- start join will be empty')
+  servers = []
+else
+  servers = search(:node, 'role:svalbard-consul-server',
+                   filter_result: { 'ip' => ['ipaddress'] })
+  servers = servers.collect { |e| e['ip'].to_s }
+  servers.delete('')
+end
 
 template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
   source 'consul/config.json.erb'
