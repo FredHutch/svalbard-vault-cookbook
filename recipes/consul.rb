@@ -119,16 +119,16 @@ end
 
 if node.role?('svalbard-consul-server')
   # Pull this nodes IP address out of the list of servers
-  servers = servers - [node['ipaddress']]
+  servers -= [node['ipaddress']]
 
   template_variables = {
-      'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
-      'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
-      'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
-      'bind_addr'  => node['ipaddress'],
-      'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-      'dc'         => node['svalbard-vault']['consul']['config']['dc'],
-      'servers'    => servers
+    'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
+    'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
+    'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
+    'bind_addr'  => node['ipaddress'],
+    'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
+    'dc'         => node['svalbard-vault']['consul']['config']['dc'],
+    'servers'    => servers
   }
 
   template "#{node['svalbard-vault']['root_dir']}/"\
