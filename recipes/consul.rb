@@ -101,7 +101,8 @@ end
 
 servers = search(:node, 'role:svalbard-consul-server',
                  filter_result: { 'ip' => ['ipaddress'] })
-servers = servers.collect { |e| "#{e['ip']}" }
+servers = servers.collect { |e| e['ip'].to_s }
+servers.delete('')
 
 template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
   source 'consul/config.json.erb'

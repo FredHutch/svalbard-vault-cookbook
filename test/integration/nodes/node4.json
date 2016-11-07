@@ -1,0 +1,8 @@
+{
+    "id": "node4",
+    "run_list": ["role[svalbard-consul-server]"],
+    "automatic": {
+        "ipaddress": "",
+        "roles": ["svalbard-consul-server"]
+    }
+}
