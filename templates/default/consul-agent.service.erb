@@ -3,10 +3,10 @@
  After=network.target
 
  [Service]
- User=root
- Group=root
+ User=consul
+ Group=consul
  Environment="GOMAXPROCS=2"
- ExecStart=<%= @bin_consul %> agent -config-dir <%= @etc_consul %>
+ ExecStart=<%= @bin_consul %> agent -config-file <%= @etc_consul %>
  ExecReload=/bin/kill -9 $MAINPID
  KillSignal=SIGINT
  Restart=on-failure
