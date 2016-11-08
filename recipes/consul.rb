@@ -99,46 +99,34 @@ end
 # Search for nodes with role "server" and use IPs from that search
 # to populate the "start_join" and "servers" in the configuration file
 
-servers = search(:node, 'role:svalbard-consul-server',
-                 filter_result: { 'ip' => ['ipaddress'] })
-servers = servers.collect { |e| "#{e['ip']}" }
-
-template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
-  source 'consul/config.json.erb'
-  variables(
-    'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
-    'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
-    'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
-    'bind_addr'  => node['ipaddress'],
-    'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-    'datacenter' => node['svalbard-vault']['consul']['config']['dc'],
-    'servers'    => servers
-  )
+if Chef::Config[:solo]
+  Chef::Log.warn('Chef solo does not support search- start join will be empty')
+  servers = []
+else
+  servers = search(:node, 'role:svalbard-consul-server',
+                   filter_result: { 'ip' => ['ipaddress'] })
+  servers = servers.collect { |e| e['ip'].to_s }
+  servers.delete('')
 end
 
+template_variables = {
+  'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
+  'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
+  'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
+  'bind_addr'  => node['ipaddress'],
+  'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
+  'dc'         => node['svalbard-vault']['consul']['config']['dc'],
+  'servers'    => servers
+}
+
 if node.role?('svalbard-consul-server')
-  # Pull this nodes IP address out of the list of servers
-  servers = servers - [node['ipaddress']]
-
-  template_variables = {
-      'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
-      'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
-      'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
-      'bind_addr'  => node['ipaddress'],
-      'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-      'dc'         => node['svalbard-vault']['consul']['config']['dc'],
-      'servers'    => servers
-  }
-
-  template "#{node['svalbard-vault']['root_dir']}/"\
-    'consul/etc/config.server.json' do
+  template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
     source 'consul/config.server.json.erb'
     variables(template_variables)
   end
-
-  template "#{node['svalbard-vault']['root_dir']}/"\
-    'consul/etc/config.bootstrap.json' do
-    source 'consul/config.bootstrap.json.erb'
+else
+  template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
+    source 'consul/config.agent.json.erb'
     variables(template_variables)
   end
 end
@@ -155,7 +143,8 @@ template '/lib/systemd/system/consul-agent.service' do
   mode 0644
   variables(
     'bin_consul' => "#{node['svalbard-vault']['root_dir']}/consul/bin/consul",
-    'etc_consul' => "#{node['svalbard-vault']['root_dir']}/consul/etc"
+    'etc_consul' => "#{node['svalbard-vault']['root_dir']}"\
+    '/consul/etc/config.json'
   )
   notifies :run, 'bash[enable agent]'
 end
