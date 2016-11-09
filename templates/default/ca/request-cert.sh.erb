@@ -54,16 +54,15 @@ ssl_config=$(tempfile)
 cp etc/openssl.conf.tmpl ${ssl_config}
 
 cat >> ${ssl_config} <<EREH
-[alt_names]
-DNS.1 = ${hostname}
-DNS.2 = ${hostname}.${dn}
-DNS.3 = ${ip}
+subjectAltName = DNS:${cert_host_name},DNS:${hostname},DNS:${hostname}.${dn},DNS:${ip}
+
 EREH
 
 # Generate CSR
 
 openssl req -config ${ssl_config} \
   -subj "/C=US/ST=Washington/L=Seattle/O=Fred Hutchinson CRC/OU=Scientific Computing/CN=${cert_host_name}/emailAddress=scicomp@fhcrc.org" \
+  -reqexts svalbard_extensions \
   -newkey rsa:1024 -nodes \
   -out requests/${cert_host_name}.csr -keyout certs/${cert_host_name}.key
 
