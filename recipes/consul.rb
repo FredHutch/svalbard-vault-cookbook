@@ -124,6 +124,11 @@ if node.role?('svalbard-consul-server')
     source 'consul/config.server.json.erb'
     variables(template_variables)
   end
+  template "#{node['svalbard-vault']['root_dir']}/"\
+           'consul/etc/config.bootstrap.json' do
+    source 'consul/config.bootstrap.json.erb'
+    variables(template_variables)
+  end
 else
   template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
     source 'consul/config.agent.json.erb'
@@ -143,8 +148,8 @@ template '/lib/systemd/system/consul-agent.service' do
   mode 0644
   variables(
     'bin_consul' => "#{node['svalbard-vault']['root_dir']}/consul/bin/consul",
-    'etc_consul' => "#{node['svalbard-vault']['root_dir']}"\
-    '/consul/etc/config.json'
+    'etc_consul' => "#{node['svalbard-vault']['root_dir']}/"\
+    'consul/etc/config.json'
   )
   notifies :run, 'bash[enable agent]'
 end
