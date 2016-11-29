@@ -8,6 +8,7 @@
  Environment="GOMAXPROCS=2"
  ExecStart=<%= @bin_consul %> agent -config-file <%= @etc_consul %>
  ExecReload=/bin/kill -HUP $MAINPID
+ ExecStop=/bin/kill -TERM $MAINPID
  KillSignal=SIGINT
  Restart=on-failure
 
