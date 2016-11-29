@@ -77,3 +77,32 @@ extract the `consul` binary to `.../bin` and move the certificates into
 
 Install `config.json` into `..../etc`.  Configure ``systemd` to start the
 consul service
+
+# Bootstrapping Consul
+
+When configured as a server (i.e. has Chef role `svalbard-console-server`),
+Chef will deliver a file called `config.bootstrap.json` into `consul/etc/`.
+This is the config file we'll use for the bootstrapping as it contains the
+nodes in the cluster.
+
+ 1. Choose a bootstrap "master"
+ 1. Edit `config.bootstrap.json`, removing the line with `start_join`
+ 1. Start consul manually: `bin/consul agent -bootstrap-expect 3 -config-file
+    etc/config.bootstrap.json`.  Adjust the value for `bootstrap-expect` to
+    match the number of servers in the cluster.
+ 1. Log into one of the other consul servers and start using the bootstrap
+    config: `bin/consul agent -config-file etc/config.bootstrap.json`
+ 1. You should see messages on the bootstrap master and this server indicating
+    that the server has joined the cluster
+ 1. Repeat the last two steps on all of the other systems in the cluster
+
+When all servers have completed the join to the cluster:
+
+ 1. Return the the bootstrap master and stop consul with ctrl-c
+ 1. Restart using `service consul-agent start`
+ 1. Verify startup with `consul members` and `consul monitor`
+
+Repeat these steps for each of the other consul servers.  The servers will all
+then be on equal footing and running in HA mode.
+ 
+
