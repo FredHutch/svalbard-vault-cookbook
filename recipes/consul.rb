@@ -120,6 +120,9 @@ template_variables = {
 }
 
 if node.role?('svalbard-consul-server')
+  # Remove myself from list of servers when acting as a server
+  template_variables['servers'] = \
+    template_variables['servers'] - [node['ipaddress']]
   template "#{node['svalbard-vault']['root_dir']}/consul/etc/config.json" do
     source 'consul/config.server.json.erb'
     variables(template_variables)
