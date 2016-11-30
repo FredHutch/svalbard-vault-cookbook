@@ -6,6 +6,7 @@
 #
 
 include_recipe 'chef-vault'
+include_recipe 'resolvconf'
 
 user 'consul' do
   comment 'Consul Service Account'
