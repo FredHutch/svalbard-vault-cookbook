@@ -4,3 +4,5 @@ default['svalbard-vault']['consul']['config'] = {
   'dc' => 'e2',
   'bootstrap' => 'false'
 }
+
+node.override['resolvconf']['nameservers'] = ['140.107.117.11']
