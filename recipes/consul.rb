@@ -109,6 +109,9 @@ else
   servers.delete('')
 end
 
+node.override['resolvconf']['nameserver'] = servers
+include_recipe 'resolvconf'
+
 template_variables = {
   'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
   'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
