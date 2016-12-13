@@ -65,6 +65,7 @@ end
 ssl_dir = "#{node['svalbard-vault']['root_dir']}/consul/etc/ssl"
 my_cert = chef_vault_item('svalbard-certs', node['hostname'])
 root_cert = chef_vault_item('svalbard-certs', 'root_cert')
+secrets = chef_vault_item('svalbard-certs', 'secrets')
 
 file "#{ssl_dir}/svalbard-root-ca.pem" do
   content root_cert['certificate']
@@ -110,6 +111,8 @@ else
   servers.delete('')
 end
 
+acl_master_token = secrets['acl_master_token']
+
 template_variables = {
   'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
   'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
@@ -117,7 +120,8 @@ template_variables = {
   'bind_addr'  => node['ipaddress'],
   'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
   'dc'         => node['svalbard-vault']['consul']['config']['dc'],
-  'servers'    => servers
+  'acl_master_token' => acl_master_token,
+  'servers' => servers
 }
 
 if node.role?('svalbard-consul-server')
