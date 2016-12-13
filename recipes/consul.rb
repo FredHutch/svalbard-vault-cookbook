@@ -114,14 +114,14 @@ end
 acl_master_token = secrets['acl_master_token']
 
 template_variables = {
-  'ca_file'    => "#{ssl_dir}/svalbard-root-ca.pem",
-  'key_file'   => "#{ssl_dir}/#{node['hostname']}.key",
-  'cert_file'  => "#{ssl_dir}/#{node['hostname']}.pem",
-  'bind_addr'  => node['ipaddress'],
-  'data_dir'   => node['svalbard-vault']['consul']['config']['data_dir'],
-  'dc'         => node['svalbard-vault']['consul']['config']['dc'],
+  'ca_file'          => "#{ssl_dir}/svalbard-root-ca.pem",
+  'key_file'         => "#{ssl_dir}/#{node['hostname']}.key",
+  'cert_file'        => "#{ssl_dir}/#{node['hostname']}.pem",
+  'bind_addr'        => node['ipaddress'],
+  'data_dir'         => node['svalbard-vault']['consul']['config']['data_dir'],
+  'dc'               => node['svalbard-vault']['consul']['config']['dc'],
   'acl_master_token' => acl_master_token,
-  'servers' => servers
+  'servers'          => servers
 }
 
 if node.role?('svalbard-consul-server')
