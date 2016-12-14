@@ -5,7 +5,7 @@
  [Service]
  User=vault
  Group=vault
- ExecStart=<%= @bin_vault %> agent -config-file <%= @etc_vault %>
+ ExecStart=<%= @bin_vault %> server -config=<%= @etc_vault %>
  ExecReload=/bin/kill -HUP $MAINPID
  ExecStop=/bin/kill -TERM $MAINPID
  KillSignal=SIGINT

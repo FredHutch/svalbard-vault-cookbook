@@ -124,7 +124,7 @@ backend_config = {
 
 listener_config = {
   'type'          => 'tcp',
-  'address'       => "#{node['ipaddress']}:8443",
+  'address'       => "#{node['ipaddress']}:8200",
   'tls_disable'   => '0',
   'tls_key_file'  => "#{ssl_dir}/wildcard.key",
   'tls_cert_file' => "#{ssl_dir}/wildcard.pem"
@@ -153,7 +153,7 @@ template '/lib/systemd/system/vault-server.service' do
   variables(
     'bin_vault' => "#{node['svalbard-vault']['root_dir']}/vault/bin/vault",
     'etc_vault' => "#{node['svalbard-vault']['root_dir']}/"\
-      'vault/etc/config.json'
+      'vault/etc/config.hcl'
   )
   notifies :run, 'bash[enable vault server]'
 end

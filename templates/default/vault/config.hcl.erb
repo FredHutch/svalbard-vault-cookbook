@@ -10,7 +10,7 @@ backend "<%= @backend_config['type'] %>" {
 
 listener "tcp" {
   address = "<%= @listener_config['address'] %>"
-  tls_disable = <%= @listener_config['tls_disable'] %>"
+  tls_disable = <%= @listener_config['tls_disable'] %>
   tls_cert_file = "<%= @listener_config['tls_cert_file'] %>"
   tls_key_file = "<%= @listener_config['tls_key_file'] %>"
 }
