@@ -4,7 +4,7 @@ maintainer_email 'mrg@fredhutch.org'
 license 'all_rights'
 description 'Installs/Configures svalbard-vault'
 long_description 'Installs/Configures svalbard-vault'
-version '0.1.17'
+version '0.1.18'
 source_url 'https://github.com/FredHutch/svalbard-vault-cookbook'
 issues_url 'https://github.com/FredHutch/svalbard-vault-cookbook/issues'
 
