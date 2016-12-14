@@ -52,6 +52,8 @@ download_url = 'https://releases.hashicorp.com/consul/'\
 bash 'download and deploy consul' do
   cwd node['svalbard-vault']['root_dir']
   code <<-EREH
+  rm -f /tmp/consul.zip \
+    #{node['svalbard-vault']['root_dir']}/consul/bin/consul && \
   wget -O /tmp/consul.zip #{download_url} && \
   unzip /tmp/consul.zip -d #{node['svalbard-vault']['root_dir']}/consul/bin
   EREH
