@@ -1,0 +1,15 @@
+ [Unit]
+ Description=Vault Server
+ After=network.target
+
+ [Service]
+ User=vault
+ Group=vault
+ ExecStart=<%= @bin_vault %> agent -config-file <%= @etc_vault %>
+ ExecReload=/bin/kill -HUP $MAINPID
+ ExecStop=/bin/kill -TERM $MAINPID
+ KillSignal=SIGINT
+ Restart=on-failure
+
+ [Install]
+ WantedBy=multi-user.target

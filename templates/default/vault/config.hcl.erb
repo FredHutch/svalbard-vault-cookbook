@@ -1,0 +1,16 @@
+backend "<%= @backend_config['type'] %>" {
+  service = "<%= @backend_config['service'] %>"
+  address = "<%= @backend_config['address'] %>"
+  scheme = "<%= @backend_config['scheme'] %>"
+  path = "<%= @backend_config['path'] %>"
+  tls_ca_file = "<%= @backend_config['tls_ca_file'] %>"
+  tls_cert_file = "<%= @backend_config['tls_cert_file'] %>"
+  tls_key_file = "<%= @backend_config['tls_key_file'] %>"
+}
+
+listener "tcp" {
+  address = "<%= @listener_config['address'] %>"
+  tls_disable = <%= @listener_config['tls_disable'] %>"
+  tls_cert_file = "<%= @listener_config['tls_cert_file'] %>"
+  tls_key_file = "<%= @listener_config['tls_key_file'] %>"
+}
