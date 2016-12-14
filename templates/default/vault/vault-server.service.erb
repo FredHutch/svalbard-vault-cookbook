@@ -3,8 +3,8 @@
  After=network.target
 
  [Service]
- User=vault
- Group=vault
+ User=root
+ Group=root
  ExecStart=<%= @bin_vault %> server -config=<%= @etc_vault %>
  ExecReload=/bin/kill -HUP $MAINPID
  ExecStop=/bin/kill -TERM $MAINPID
