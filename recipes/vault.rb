@@ -12,6 +12,7 @@
 #
 
 include_recipe 'chef-vault'
+include_recipe 'svalbard-vault::consul'
 
 directory node['svalbard-vault']['root_dir'] do
   owner 'root'
