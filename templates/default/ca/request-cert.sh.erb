@@ -54,7 +54,7 @@ ssl_config=$(tempfile)
 cp etc/openssl.conf.tmpl ${ssl_config}
 
 cat >> ${ssl_config} <<EREH
-subjectAltName = DNS:${cert_host_name},DNS:${hostname},DNS:${hostname}.${dn},DNS:${ip}
+subjectAltName = DNS:${cert_host_name},DNS:${hostname},DNS:${hostname}.${dn},IP:${ip}
 
 EREH
 
