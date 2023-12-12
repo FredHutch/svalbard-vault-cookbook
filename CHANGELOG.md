@@ -1,3 +1,7 @@
+# Version 0.0.0
+
+  - dummy commit
+  
 # Version 0.1.4
 
   - fixed missing OpenSSL files
